@@ -1,10 +1,14 @@
 
 **Project Description**
 
-![image](https://github.com/user-attachments/assets/f9a71ddb-37a7-44f9-a884-7835ebdb3345)
+**Project basically display the Performance of AI agent used for handling customer calls**
 
+![AIagent perfoemance](https://github.com/user-attachments/assets/603be921-c1b4-48f2-a43c-346a21736ade)
 
 **This Next.js project leverages serverless architecture on AWS to provide a secure and scalable solution. It utilizing a Lambda function to handle generating fake call transcript using python script and also handles GET and POST request operations. Data is persisted in an AWS DynamoDB table, ensuring efficient and reliable storage. An API Gateway endpoint serves as the interface for client interactions, securely managing access to the backend services.**
+
+
+![AI agent](https://github.com/user-attachments/assets/4c8965fe-fcc6-4375-b36c-821cf46446de)
 
 Key Features
 
