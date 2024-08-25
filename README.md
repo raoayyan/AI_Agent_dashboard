@@ -1,3 +1,19 @@
+
+**Project Description**
+
+![image](https://github.com/user-attachments/assets/f9a71ddb-37a7-44f9-a884-7835ebdb3345)
+
+
+**This Next.js project leverages serverless architecture on AWS to provide a secure and scalable solution. It employs AES encryption for sensitive data, utilizing a Lambda function to handle encryption/decryption operations. Data is persisted in an AWS DynamoDB table, ensuring efficient and reliable storage. An API Gateway endpoint serves as the interface for client interactions, securely managing access to the backend services.**
+
+Key Features
+
+Next.js Frontend: Built with the popular React framework for a modern and performant user experience.
+Serverless Backend: Utilizes AWS Lambda functions for event-driven execution, eliminating the need for server management.
+AES Encryption: Sensitive data is protected using Advanced Encryption Standard, ensuring confidentiality and security.
+DynamoDB Storage: Data is stored in a highly scalable and durable NoSQL database, optimized for efficient retrieval and updates.
+API Gateway Endpoint: Provides a secure and managed API for client interactions, with authentication and authorization mechanisms in place.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
