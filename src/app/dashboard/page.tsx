@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [data,setData] = useState<CallData[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [calldata,setCallData] = useState<any[]>([]);
 // useEffect (()=>{
 //   async function GetData(){
 //     try {
@@ -43,10 +43,15 @@ const Dashboard = () => {
 async function GeneareRandonCallData(){
   try {
     setLoading(true);
-    const response = await fetch("you api gateway endpoint",{
+    const response = await fetch("/api/getData",{
       method: 'POST',
-      mode: 'no-cors'
-    });
+      // mode: 'no-cors'
+    }) .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      setCallData(prevData => [...prevData, data]);
+    });;
+    
     
     // If POST is successful, increment the count to trigger the re-fetch
     setCount(prevCount => prevCount + 1);
@@ -57,7 +62,7 @@ finally {
   setLoading(false); // Set loading back to false after the request completes
 }
 }
-
+console.log("this calldata1",calldata)
   
   //use with lambda function
   //const totalCalls = data.length;
@@ -69,38 +74,75 @@ finally {
   
 
 //hard coded 
-const totalCalls = 100
-const AIhandle = 50;
-const humanhandle = 30;
-const AIhandlesales = 25;
-const AIhandletask = 35;
-const overAIhandlsuccess = 15;
- const aISalesPerformance = ((AIhandlesales/AIhandle)*100).toFixed(0)
- const aiTaskSuccess = ((AIhandletask/AIhandle)*100).toFixed(0)
-  const overAllAiPerformance = ((Number(overAIhandlsuccess) / Number(AIhandle)) * 100).toFixed(0);
- 
-
-  const callData = [
-    {
-      callId: "CALL001",
-      taskCompleted: true,
-      salesConversion: true,
-      call_handle_by: "AI Agent",
-    },
-    {
-      callId: "CALL002",
-      taskCompleted: false,
-      salesConversion: false,
-      call_handle_by: "Human Agent",
-    },
-    {
-      callId: "CALL003",
-      taskCompleted: true,
-      salesConversion: true,
-      call_handle_by: "AI Agent",
-    },
+const totalCalls = calldata.length;
+const AIhandle = calldata.filter(e => e.call_handle_by === "AI Agent").length;
+const humanhandle = calldata.filter(e => e.call_handle_by === "Human Agent").length;
+const AIhandlesales =calldata.filter(e => e.call_handle_by === "AI Agent" && e.salesConversion===true).length;
+const AIhandletask = calldata.filter(e => e.call_handle_by === "AI Agent" && e.taskCompleted===true).length;
+const overAIhandlsuccess = calldata.filter(e => e.call_handle_by === "AI Agent" && e.taskCompleted===true && e.salesConversion===true).length;
+const aISalesPerformance = ((AIhandlesales/AIhandle)*100).toFixed(0)
+const aiTaskSuccess = ((AIhandletask/AIhandle)*100).toFixed(0)
+const overAllAiPerformance = ((Number(overAIhandlsuccess) / Number(AIhandle)) * 100).toFixed(0);
+const AIcallcuration = calldata.filter(e => e.call_handle_by === "AI Agent")
+const totalDuration = AIcallcuration.reduce((acc, cur) => acc + cur.duration, 0);
+const avgDuration = (totalDuration/AIhandle).toFixed(2)
+  // const callData = [
+  //   {
+  //     callId: "CALL001",
+  //     taskCompleted: true,
+  //     salesConversion: true,
+  //     call_handle_by: "AI Agent",
+  //   },
+  //   {
+  //     callId: "CALL002",
+  //     taskCompleted: false,
+  //     salesConversion: false,
+  //     call_handle_by: "Human Agent",
+  //   },
+  //   {
+  //     callId: "CALL003",
+  //     taskCompleted: true,
+  //     salesConversion: true,
+  //     call_handle_by: "AI Agent",
+  //   },
+  //   {
+  //     callId: "CALL004",
+  //     taskCompleted: false,
+  //     salesConversion: false,
+  //     call_handle_by: "Human Agent",
+  //   },
+  //   {
+  //     callId: "CALL005",
+  //     taskCompleted: true,
+  //     salesConversion: true,
+  //     call_handle_by: "AI Agent",
+  //   },
+  //   {
+  //     callId: "CALL006",
+  //     taskCompleted: false,
+  //     salesConversion: false,
+  //     call_handle_by: "Human Agent",
+  //   },
+  //   {
+  //     callId: "CALL007",
+  //     taskCompleted: true,
+  //     salesConversion: true,
+  //     call_handle_by: "AI Agent",
+  //   },
+  //   {
+  //     callId: "CALL008",
+  //     taskCompleted: false,
+  //     salesConversion: false,
+  //     call_handle_by: "Human Agent",
+  //   },
+  //   {
+  //     callId: "CALL009",
+  //     taskCompleted: true,
+  //     salesConversion: true,
+  //     call_handle_by: "AI Agent",
+  //   },
   
-  ];
+  // ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 text-white p-8">
@@ -135,7 +177,7 @@ const overAIhandlsuccess = 15;
               <div className="text-gray-400">Calls Handled by Human</div>
             </div>
             <div className="text-center bg-gray-800 p-4 rounded-lg shadow-md">
-              <div className="text-5xl font-bold">{2.5} min</div>
+              <div className="text-5xl font-bold">{avgDuration} min</div>
               <div className="text-gray-400">Avg Response Time</div>
             </div>
           </div>
@@ -303,18 +345,20 @@ const overAIhandlsuccess = 15;
           <thead>
             <tr className="border-b border-gray-600">
               <th className="p-3">Call ID</th>
+              <th className="p-3">Duration</th>
               <th className="p-3">Task Completed</th>
               <th className="p-3">Sales Conversion</th>
               <th className="p-3">Handled By</th>
             </tr>
           </thead>
           <tbody>
-            {callData.map((call) => (
+            {calldata.map((call) => (
               <tr
                 key={call.callId}
                 className="border-b border-gray-600 hover:bg-gray-600 transition-colors"
               >
                 <td className="p-3">{call.callId}</td>
+                <td className="p-3">{call.duration}</td>
                 <td className="p-3">
                   <span
                     className={`px-2 py-1 rounded ${
